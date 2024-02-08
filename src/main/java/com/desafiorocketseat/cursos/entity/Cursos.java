@@ -12,23 +12,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @Table(name = "cursos")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Cursos {
 
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
 
+    @NonNull
     @Column(name = "name")
     private String name;
 
+    @NonNull
     @Column(name = "category")
     private String category;
 
