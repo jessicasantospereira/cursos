@@ -5,9 +5,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.desafiorocketseat.cursos.dto.CursosDTO;
 import com.desafiorocketseat.cursos.usecase.AtivarCurso;
 import com.desafiorocketseat.cursos.usecase.CadastrarCurso;
+import com.desafiorocketseat.cursos.usecase.DeletarCurso;
+import com.desafiorocketseat.cursos.usecase.EditarCurso;
 import com.desafiorocketseat.cursos.usecase.ListarCursos;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
@@ -27,37 +30,41 @@ public class CursosController {
     private final ListarCursos listarCursos;
     private final CadastrarCurso cadastrarCurso;
     private final AtivarCurso ativarCurso;
+    private final DeletarCurso deletarCurso;
+    private final EditarCurso editarCurso;
 
-    public CursosController(ListarCursos listarCursos, CadastrarCurso cadastrarCurso, AtivarCurso ativarCurso) {
+    public CursosController(ListarCursos listarCursos, CadastrarCurso cadastrarCurso, AtivarCurso ativarCurso,
+            DeletarCurso deletarCurso, EditarCurso editarCurso) {
         this.listarCursos = listarCursos;
         this.cadastrarCurso = cadastrarCurso;
         this.ativarCurso = ativarCurso;
+        this.deletarCurso = deletarCurso;
+        this.editarCurso = editarCurso;
     }
 
     // TODO: filtro de cursos por nome e categoria
     @GetMapping
-    public ResponseEntity<?> listarCursos() {
-        var lista = listarCursos.execute();
+    public ResponseEntity<?> listarCursos(@RequestParam(required = false) String name,
+            @RequestParam(required = false) String category) {
+        var lista = listarCursos.execute(name, category);
         return ResponseEntity.ok(lista);
     }
 
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody CursosDTO cursosDTO) {
-        // TODO: process POST request
         var curso = cadastrarCurso.execute(cursosDTO);
         return ResponseEntity.ok(curso);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> editar(@PathVariable UUID id, @RequestBody CursosDTO cursosDTO) {
-        // TODO: process PUT request
-
-        return ResponseEntity.ok().build();
+        var curso = editarCurso.execute(id, cursosDTO);
+        return ResponseEntity.ok(curso);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable UUID id) {
-
+        deletarCurso.execute(id);
         return ResponseEntity.noContent().build();
     }
 

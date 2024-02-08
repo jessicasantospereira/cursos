@@ -16,7 +16,14 @@ public class ListarCursos {
         this.repository = cursosRepository;
     }
 
-    public List<Cursos> execute() {
-        return repository.findAll();
+    public List<Cursos> execute(String name, String category) {
+        if (name != null && category != null)
+            return repository.findByNameAndCategory(name, category);
+        else if (name != null)
+            return repository.findByName(name);
+        else if (category != null)
+            return repository.findByCategory(category);
+        else
+            return repository.findAll();
     }
 }
